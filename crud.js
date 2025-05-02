@@ -21,4 +21,19 @@ const addUserWatchTimeVideo = (userId, videoId, watchtime, callback) => {
     })
 }
 
-module.exports = {addVideo, addUser, addUserWatchTimeVideo}
+const getUserByUserName = (userName, callback) => {
+    const sql = `SELECT * FROM T_USERS WHERE username = ?`
+    db.all(sql, [userName], function(err, rows) {
+        if (rows.length != 1){
+            callback(err, null)
+        } else {
+
+            callback(err, rows[0])
+        }
+    })
+}
+
+module.exports = {
+    addVideo, addUser, addUserWatchTimeVideo,
+    getUserByUserName
+}

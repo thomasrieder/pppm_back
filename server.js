@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const {addVideo, addUser, addUserWatchTimeVideo} = require("./crud")
+const {addVideo, addUser, addUserWatchTimeVideo, getUserByUserName} = require("./crud")
 
 const app = express();
 const port = 3030;
@@ -19,6 +19,20 @@ app.get('/', (req, res) => {
   })
 });
 
+app.post('/addUser', (req, res) => {
+  data = req.body
+
+  console.log("addUSER: "+data.userName+", "+data.password)
+  addUser(data.userName, data.password, (err, data) => {
+    if (err) {
+      console.error(err.message)
+      res.status(500).send(err.message)
+    } else {
+      res.status(201).send(data.id)
+    }
+  })
+})
+
 app.post('/addVideoWTUser', (req, res) => {
   data = req.body
 
@@ -29,6 +43,34 @@ app.post('/addVideoWTUser', (req, res) => {
       res.status(500).send(err.message)
     } else {
       res.status(201).send("addVideoWTUser with ID : " + data.id)
+    }
+  })
+})
+
+app.post('/checkLoginUser', (req, res) => {
+  data = req.body
+  getUserByUserName(data.userName, (err, row) => {
+    if (err) {
+      console.error(err.message)
+      res.status(500).send(err.message)
+    } else {
+
+      console.log(row)
+      
+      if (row === null) {
+        res.status(201).send(-1)
+        return
+      }
+
+      
+      if (row.password == data.password) {
+        res.status(201).send({
+          "userId": row.userId,
+          "username": row.username
+        })
+      } else {
+        res.status(201).send(-1)
+      }
     }
   })
 })
