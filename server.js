@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const {addVideo, addUser, addUserWatchTimeVideo, getUserByUserName} = require("./crud")
+const {
+  addVideo, addUser, addUserWatchTimeVideo,
+  getUserByUserName, getAllUser} = require("./crud")
 
 const app = express();
 const port = 3030;
@@ -75,6 +77,16 @@ app.post('/checkLoginUser', (req, res) => {
   })
 })
 
+app.post('/getAllUser', (req, res) => {
+  getAllUser((err, data) => {
+    if (err) {
+      console.error(err.message)
+      res.status(500).send(err.message)
+    } else {
+      res.status(201).send(data)
+    }
+  })
+})
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

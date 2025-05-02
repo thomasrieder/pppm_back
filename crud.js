@@ -33,7 +33,14 @@ const getUserByUserName = (userName, callback) => {
     })
 }
 
+const getAllUser = (callback) => {
+    const sql = `SELECT userId, username FROM T_USERS`
+    db.all(sql, function(err, rows) {
+        callback(err, rows)
+    })
+}
+
 module.exports = {
     addVideo, addUser, addUserWatchTimeVideo,
-    getUserByUserName
+    getUserByUserName, getAllUser
 }
